@@ -1,0 +1,41 @@
+[package]
+name = "nft_marketplace_backend"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Web framework (Actix)
+actix-web = "4.10.2"                  # :contentReference[oaicite:0]{index=0}
+actix-cors = "0.7.1"                  # :contentReference[oaicite:1]{index=1}
+actix-rt = "2.10.0"                   # :contentReference[oaicite:2]{index=2}
+
+# Async runtime
+tokio = { version = "1.44.2", features = ["full"] }    # :contentReference[oaicite:3]{index=3}
+
+# Serialization
+serde = { version = "1.0.219", features = ["derive"] } # :contentReference[oaicite:4]{index=4}
+serde_json = "1.0.140"               # :contentReference[oaicite:5]{index=5}
+
+# Logging / Tracing
+tracing = "0.1.41"                   # :contentReference[oaicite:6]{index=6}
+tracing-subscriber = "0.3.19"        # :contentReference[oaicite:7]{index=7}
+
+# HTTP client
+reqwest = { version = "0.12.15", features = ["json"] } # :contentReference[oaicite:8]{index=8}
+
+# Utilities
+uuid = { version = "1.16.0", features = ["serde", "v4"] } # :contentReference[oaicite:9]{index=9}
+chrono = { version = "0.4.40", features = ["serde"] }    # :contentReference[oaicite:10]{index=10}
+
+# Database ORM
+sqlx = { version = "0.8.5", features = ["postgres", "runtime-tokio-rustls", "uuid", "chrono", "macros"] } # :contentReference[oaicite:11]{index=11}
+
+# Solana client libraries
+solana-client = "2.2.7"             # :contentReference[oaicite:12]{index=12}
+solana-sdk    = "2.2.2"             # :contentReference[oaicite:13]{index=13}
+
+# Environment variables
+dotenvy = "0.15.7"                  # :contentReference[oaicite:14]{index=14}
+
+# HTTP types (for CORS, etc.)
+http = "0.2.11"                     # :contentReference[oaicite:15]{index=15}

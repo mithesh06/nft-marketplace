@@ -1,0 +1,15 @@
+[package]
+name = "metaplex_rust"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+solana-client = "1.14.17"
+solana-sdk = "1.14.17"
+solana-program = "1.14.17"
+
+mpl-token-metadata = "1.9.0"
+mpl-auction-house = "1.4.1"
+
+spl-token = "3.5.0"
+spl-associated-token-account = "1.1.2"

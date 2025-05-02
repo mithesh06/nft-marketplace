@@ -1,0 +1,98 @@
+/* Global styles */
+body {
+  background-color: #111;
+  color: white;
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.header {
+  background-color: #000;
+  padding: 2rem;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #9b59b6; /* Purple color */
+}
+
+.toggle-container {
+  display: flex;
+  align-items: center;
+}
+
+.label {
+  color: white;
+  margin-right: 1rem;
+}
+
+.radio {
+  display: none;
+}
+
+.toggle-switch {
+  position: relative;
+  width: 50px;
+  height: 25px;
+  background-color: #555;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  transition: 0.3s;
+}
+
+.toggle-circle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  transition: 0.3s;
+}
+
+.wallet-button,
+.wallet-button-connect {
+  padding: 10px 20px;
+  border-radius: 25px;
+  background: linear-gradient(to right, #9b59b6, #8e44ad);
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.wallet-button:hover,
+.wallet-button-connect:hover {
+  background: linear-gradient(to right, #8e44ad, #9b59b6);
+}
+
+.subtext-container {
+  margin-top: 2rem;
+}
+
+.explore-nfts {
+  font-size: 1.5rem;
+  color: #9b59b6;
+}
+
+.subtext {
+  color: #bbb;
+}
+
+.tip-message {
+  background-color: #333;
+  color: #aaa;
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: 1rem;
+}

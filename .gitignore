@@ -1,0 +1,10 @@
+/crt_auction_house/node_modules/
+/crt_auction_house/auction_house_key.txt
+/metaplex_rust/target/
+/mint_nfts/nft-keypair.json
+/mint_nfts/nft.txt
+/mint_nfts/api_insert.py
+/mint_nfts/target/
+/nft_marketplace_backend/target/
+/nft_marketplace_backend/.env
+/nft_marketplace_backend/TaskAtHand.txt
