@@ -29,12 +29,15 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(pool.clone()))  // Pass pool to each handler
-            .route("/health", web::get().to(health_check))
-            .route("/register_wallet", web::post().to(register_wallet))
-            .route("/create_listing", web::post().to(create_listing))
-            .route("/active_listings", web::get().to(get_active_listings))
-            .route("/create_transaction", web::post().to(create_transaction))
-            .route("/transactions", web::get().to(get_transactions))
+            .route("/health", web::get().to(handlers::health_check))
+            .route("/wallet/register", web::post().to(handlers::register_wallet))
+            .route("/nft/register", web::post().to(handlers::register_nft))
+            .route("/listings", web::post().to(handlers::create_listing))
+            .route("/listings/active", web::get().to(handlers::get_active_listings))
+            .route("/transactions", web::get().to(handlers::get_transactions))
+            .route("/transaction/create", web::post().to(handlers::create_transaction))
+            .route("/transaction/confirm", web::post().to(handlers::confirm_transaction))
+            .route("/listing/confirm", web::post().to(handlers::list_for_sale))
     })
     .bind(addr)?
     .run()

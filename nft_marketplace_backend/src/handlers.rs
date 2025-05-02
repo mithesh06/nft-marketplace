@@ -3,7 +3,7 @@ use sqlx::{Acquire, PgPool, Row};
 use uuid::Uuid;
 use chrono::Utc;
 use crate::models::{User, Listing, Transaction};
-use crate::entities::{WalletRegisterRequest, ListingCreateRequest, TransactionCreateRequest};
+use crate::entities::{ConfirmListingRequest, ConfirmTransactionRequest, ListingCreateRequest, RegisterNftRequest, TransactionCreateRequest, WalletRegisterRequest};
 //use actix_web::Error;
 
 // Health Check Endpoint
@@ -223,6 +223,101 @@ pub async fn get_transactions(pool: web::Data<PgPool>) -> impl Responder {
         Err(e) => {
             eprintln!("DB Error: {}", e);
             HttpResponse::InternalServerError().body("Failed to fetch transactions")
+        }
+    }
+}
+
+
+// Register an NFT (owner must call this)
+pub async fn register_nft(
+    pool: web::Data<PgPool>,
+    req: web::Json<RegisterNftRequest>,
+) -> impl Responder {
+    let id = Uuid::new_v4();
+    let now = Utc::now().naive_utc();
+
+    let result = sqlx::query(
+        "INSERT INTO nfts (id, mint_address, metadata_uri, current_owner_id, is_rented, created_at) 
+         VALUES ($1, $2, $3, $4, $5, $6) RETURNING id"
+    )
+    .bind(id)
+    .bind(&req.mint_address)
+    .bind(&req.metadata_uri)
+    .bind(req.owner_id)
+    .bind(false)
+    .bind(now)
+    .fetch_one(pool.get_ref())
+    .await;
+
+    match result {
+        Ok(_) => HttpResponse::Ok().json(serde_json::json!({ "status": "NFT registered" })),
+        Err(e) => {
+            eprintln!("DB Error: {}", e);
+            HttpResponse::InternalServerError().body("Failed to register NFT")
+        }
+    }
+}
+
+// Record listing after Metaplex listing is completed
+pub async fn list_for_sale(
+    pool: web::Data<PgPool>,
+    req: web::Json<ConfirmListingRequest>,
+) -> impl Responder {
+    let id = Uuid::new_v4();
+    let now = Utc::now().naive_utc();
+
+    let result = sqlx::query(
+        "INSERT INTO listings (id, nft_id, seller_id, price_lamports, is_rentable, rent_price_lamports, rent_duration_days, status, created_at, updated_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, 'active', $8, $9)"
+    )
+    .bind(id)
+    .bind(req.nft_id)
+    .bind(req.seller_id)
+    .bind(req.price_lamports)
+    .bind(req.is_rentable)
+    .bind(req.rent_price_lamports)
+    .bind(req.rent_duration_days)
+    .bind(now)
+    .bind(now)
+    .execute(pool.get_ref())
+    .await;
+
+    match result {
+        Ok(_) => HttpResponse::Ok().json(serde_json::json!({ "status": "Listing saved" })),
+        Err(e) => {
+            eprintln!("DB Error: {}", e);
+            HttpResponse::InternalServerError().body("Failed to save listing")
+        }
+    }
+}
+
+// Confirm purchase/rent after Solana tx is signed
+pub async fn confirm_transaction(
+    pool: web::Data<PgPool>,
+    req: web::Json<ConfirmTransactionRequest>,
+) -> impl Responder {
+    let id = Uuid::new_v4();
+    let now = Utc::now().naive_utc();
+
+    let result = sqlx::query(
+        "INSERT INTO transactions (id, nft_id, buyer_id, seller_id, type_, amount_lamports, timestamp, rent_start, rent_end)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, NULL, NULL)"
+    )
+    .bind(id)
+    .bind(req.nft_id)
+    .bind(req.buyer_id)
+    .bind(req.seller_id)
+    .bind(&req.type_)
+    .bind(req.amount_lamports)
+    .bind(now)
+    .execute(pool.get_ref())
+    .await;
+
+    match result {
+        Ok(_) => HttpResponse::Ok().json(serde_json::json!({ "status": "Transaction recorded", "tx_signature": req.signature })),
+        Err(e) => {
+            eprintln!("DB Error: {}", e);
+            HttpResponse::InternalServerError().body("Failed to record transaction")
         }
     }
 }
