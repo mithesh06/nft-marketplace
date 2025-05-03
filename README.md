@@ -18,7 +18,6 @@ A decentralized NFT marketplace built on Solana. Users can mint, list, buy, and 
 - **NFT Interaction**: Metaplex
 - **Wallet**: Phantom Wallet (or other Solana wallets)
 - **Backend**: Rust (Solana backend)
-- **Storage**: IPFS via NFT.Storage or similar (if applicable)
 
 ## 📦 Installation
 
